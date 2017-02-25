@@ -33,26 +33,3 @@ public class DTPacMan extends Controller<MOVE>
 		return this.dt.makeDecision(game);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

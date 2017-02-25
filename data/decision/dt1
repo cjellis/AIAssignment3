@@ -1,0 +1,34 @@
+{
+	"1": {
+		"type": 1,
+		"name": "EdibleGhostWithinDistance",
+		"values": [20],
+		"success": "2",
+		"failure": "3"
+	},
+	"2": {
+		"type": 0,
+		"direction": TOWARDS,
+		"heuristic": "PATH",
+		"target": "ClosestGhost"
+	},
+	"3": {
+		"type": 1,
+		"name": "NonEdibleGhostWithinDistance",
+		"values": [20],
+		"success": "4",
+		"failure": "5"
+	},
+	"4": {
+		"type": 0,
+		"direction": "AWAY",
+		"heuristic": "PATH",
+		"target": "ClosestGhost"
+	},
+	"5": {
+		"type": 0,
+		"direction": TOWARDS,
+		"heuristic": "PATH",
+		"target": "ClosestAnyPill"
+	}
+}
