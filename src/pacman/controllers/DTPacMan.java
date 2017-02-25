@@ -25,7 +25,7 @@ public class DTPacMan extends Controller<MOVE>
 	DecisionTree dt;
 
 	public DTPacMan() {
-		this.dt = new DecisionTree("data/decision/dt1");
+		this.dt = new DecisionTree("data/decision/dt2");
 	}
 	
 	public MOVE getMove(Game game,long timeDue)
