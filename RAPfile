@@ -1,0 +1,44 @@
+{
+	"1": {
+		"type": PRIMITIVE (0),
+		"action": ACTION,
+		"target": TARGET
+	},
+	"2": {
+		"type": RAP (1),
+		"action": [id],
+		"success": [SUCCESS],
+		"validity": [TEST],
+		"goal": GOALS
+	}
+}
+
+ACTION
+MOVETOWARD
+MOVEAWAY
+
+TARGET
+ClosestGhost
+ClosestAnyPill
+ClosestPowerPill
+
+TEST
+PillsAvailable
+edibleGhostsWithinDistance
+edibleGhostsAlive
+nonEdibleGhostWithinDistance
+
+SUCCESS
+GetAllPills
+StayAlive
+EatGhosts
+
+GOALS
+Stay alive
+Get pills
+Eat ghosts
+
+HEURISTIC
+PATH
+EUCLID
+MANHATTAN

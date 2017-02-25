@@ -1,0 +1,47 @@
+[
+	{
+		"id": "5",
+		"type": 1,
+		"goal": "Eat Ghosts",
+		"success": ["false"],
+		"validity": ["edibleGhostWithinDistance,20"],
+		"action": ["6"]
+	},
+	{
+		"id": "3",
+		"type": 1,
+		"goal": "Stay Alive",
+		"success": ["false"],
+		"validity": ["nonEdibleGhostWithinDistance,20"],
+		"action": ["4"]
+	},
+	{
+		"id": "1",
+		"type": 1,
+		"goal": "Eat pills",
+		"success": ["false"],
+		"validity": ["!nonEdibleGhostWithinDistance,20"],
+		"action": ["2"]
+	},
+	{
+		"id": "2",
+		"type": 0,
+		"action": "MOVETOWARD",
+		"target": "ClosestAnyPill",
+		"heuristic": "PATH"
+	},
+	{
+		"id": "4",
+		"type": 0,
+		"action": "MOVEAWAY",
+		"target": "ClosestGhost",
+		"heuristic": "PATH"
+	},
+	{
+		"id": "6",
+		"type": 0,
+		"action": "MOVETOWARD",
+		"target": "ClosestGhost",
+		"heuristic": "PATH"
+	}
+]

@@ -1,4 +1,4 @@
-package pacman.controllers.DecisionTree;
+package pacman.controllers;
 
 import pacman.game.Constants;
 import pacman.game.Game;

@@ -1,5 +1,6 @@
 package pacman.controllers.DecisionTree;
 
+import pacman.controllers.Util;
 import pacman.game.Constants;
 import pacman.game.Game;
 

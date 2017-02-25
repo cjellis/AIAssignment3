@@ -1,0 +1,35 @@
+{
+	"{id}" : {
+		"type": 1,
+		"name": ONEOF TYPES,
+		"values": [values for that type],
+		"success": "id",
+		"failure": "id"
+	}
+	"{id}": {
+		"type": 0
+		"direction": ONEOF PRIMITIVE,
+		"heuristic": ONEOF HEURISTIC,
+		"target": ONEOF TARGET
+	}
+}
+
+id "1" is the root of the tree
+
+TYPES
+EdibleGhostWithinDistance
+NonEdibleGhostWithinDistance
+
+PRIMITIVES
+AWAY
+TOWARDS
+
+HEURISTIC
+PATH
+EUCLID
+MANHATTAN
+
+TARGET
+ClosestGhost
+ClosestAnyPill
+ClosestPowerPill

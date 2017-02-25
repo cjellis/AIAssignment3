@@ -13,6 +13,7 @@ import pacman.controllers.Controller;
 import pacman.controllers.DTPacMan;
 import pacman.controllers.HumanController;
 import pacman.controllers.KeyBoardInput;
+import pacman.controllers.RAPPacMan;
 import pacman.controllers.examples.AggressiveGhosts;
 import pacman.controllers.examples.Legacy;
 import pacman.controllers.examples.Legacy2TheReckoning;
@@ -62,7 +63,9 @@ public class Executor
 		///*
 		//run the game in asynchronous mode.
 		boolean visual=true;
-		exec.runGameTimed(new DTPacMan(),new StarterGhosts(),visual);
+		//exec.runGameTimed(new DTPacMan(),new StarterGhosts(),visual);
+
+		exec.runGameTimed(new RAPPacMan(),new StarterGhosts(),visual);
 //		exec.runGameTimed(new NearestPillPacMan(),new AggressiveGhosts(),visual);
 		//exec.runGameTimed(new StarterPacMan(),new StarterGhosts(),visual);
 //		exec.runGameTimed(new HumanController(new KeyBoardInput()),new StarterGhosts(),visual);	
