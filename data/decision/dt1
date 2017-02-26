@@ -10,7 +10,7 @@
 		"type": 0,
 		"direction": TOWARDS,
 		"heuristic": "PATH",
-		"target": "ClosestGhost"
+		"target": "ClosestEdibleGhost"
 	},
 	"3": {
 		"type": 1,
@@ -23,7 +23,7 @@
 		"type": 0,
 		"direction": "AWAY",
 		"heuristic": "PATH",
-		"target": "ClosestGhost"
+		"target": "ClosestNonEdibleGhost"
 	},
 	"5": {
 		"type": 0,

@@ -12,7 +12,7 @@
 		"type": 1,
 		"goal": "Stay Alive",
 		"success": ["false"],
-		"validity": ["nonEdibleGhostWithinDistance,20"],
+		"validity": ["nonEdibleGhostWithinDistance,10"],
 		"action": ["4"]
 	},
 	{
@@ -20,7 +20,7 @@
 		"type": 1,
 		"goal": "Eat pills",
 		"success": ["false"],
-		"validity": ["!nonEdibleGhostWithinDistance,20"],
+		"validity": ["true"],
 		"action": ["2"]
 	},
 	{
@@ -34,14 +34,14 @@
 		"id": "4",
 		"type": 0,
 		"action": "MOVEAWAY",
-		"target": "ClosestGhost",
+		"target": "ClosestNonEdibleGhost",
 		"heuristic": "PATH"
 	},
 	{
 		"id": "6",
 		"type": 0,
 		"action": "MOVETOWARD",
-		"target": "ClosestGhost",
+		"target": "ClosestEdibleGhost",
 		"heuristic": "PATH"
 	}
 ]

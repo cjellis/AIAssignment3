@@ -10,14 +10,29 @@ public class Util {
     public static int getLocalTarget(Game game, String target, Constants.DM heuristic) {
         int local_target = -1;
         switch(target){
-            case "ClosestGhost":
+            case "ClosestNonEdibleGhost":
                 int d = Integer.MAX_VALUE;
                 for(Constants.GHOST ghost : Constants.GHOST.values()) {
-                    int distance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
-                            game.getGhostCurrentNodeIndex(ghost));
-                    if (distance < d) {
-                        d = distance;
-                        local_target = game.getGhostCurrentNodeIndex(ghost);
+                    if (game.getGhostEdibleTime(ghost) == 0) {
+                        int distance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+                                game.getGhostCurrentNodeIndex(ghost));
+                        if (distance < d) {
+                            d = distance;
+                            local_target = game.getGhostCurrentNodeIndex(ghost);
+                        }
+                    }
+                }
+                break;
+            case "ClosestEdibleGhost":
+                d = Integer.MAX_VALUE;
+                for(Constants.GHOST ghost : Constants.GHOST.values()) {
+                    if (game.getGhostEdibleTime(ghost) > 0) {
+                        int distance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+                                game.getGhostCurrentNodeIndex(ghost));
+                        if (distance < d) {
+                            d = distance;
+                            local_target = game.getGhostCurrentNodeIndex(ghost);
+                        }
                     }
                 }
                 break;
@@ -70,7 +85,7 @@ public class Util {
                 break;
 
             default:
-                local_target = 0; //TODO change this
+                local_target = game.getPacmanCurrentNodeIndex(); //TODO change this
         }
         return local_target;
     }

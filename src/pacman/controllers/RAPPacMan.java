@@ -25,7 +25,7 @@ public class RAPPacMan extends Controller<MOVE>
 	}
 	
 	public MOVE getMove(Game game,long timeDue)
-	{			
+	{
 		return this.rap.execute(game);
 	}
 }

@@ -21,11 +21,13 @@ public class RAP {
     HashMap<String, RAPInstance> raps;
 
     ArrayList<RAPInstance> queue;
+    ArrayList<RAPInstance> orig_queue;
 
     public RAP(String file) {
         this.file = file;
         this.raps = new HashMap<>();
         this.queue = new ArrayList<>();
+        this.orig_queue = new ArrayList<>();
         parseFile();
     }
 
@@ -42,6 +44,7 @@ public class RAP {
     }
 
     protected void buildRaps(){
+        int index = 0;
         for(JsonElement j : this.json) {
             JsonObject rap = j.getAsJsonObject();
             int type = rap.get("type").getAsInt();
@@ -82,17 +85,21 @@ public class RAP {
 
                 RAPInstance r = new TaskNet(actionsArray, successArray, validityArray);
                 raps.put(id, r);
-                queue.add(r);
+                queue.add(index, r);
+                orig_queue.add(index, r);
+                index++;
             }
         }
     }
 
     public Constants.MOVE execute(Game game) {
+        Constants.MOVE move;
         while(true) {
             RAPInstance rap = queue.get(0);
             if(rap.isPrimitive()) {
-                queue.remove(0);
-                return rap.execute(game);
+                queue = new ArrayList<>(orig_queue);
+                move = rap.execute(game);
+                break;
             } else {
                 queue.remove(0);
                 if(!rap.isSuccessful(game)){
@@ -108,5 +115,6 @@ public class RAP {
                 }
             }
         }
+        return move;
     }
 }

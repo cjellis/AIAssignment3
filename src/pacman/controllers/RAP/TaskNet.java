@@ -93,8 +93,9 @@ public class TaskNet implements RAPInstance {
                 int distance = Integer.valueOf(values);
                 for(Constants.GHOST ghost : Constants.GHOST.values()) {
                     if (game.getGhostEdibleTime(ghost) == 0) {
-                        if (game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
-                                game.getGhostCurrentNodeIndex(ghost)) < distance) {
+                        int d = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+                                game.getGhostCurrentNodeIndex(ghost));
+                        if (d != -1 && d < distance) {
                             result = true;
                         }
                     }
@@ -109,8 +110,9 @@ public class TaskNet implements RAPInstance {
                 distance = Integer.valueOf(values);
                 for(Constants.GHOST ghost : Constants.GHOST.values()) {
                     if (game.getGhostEdibleTime(ghost) > 0) {
-                        if (game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
-                                game.getGhostCurrentNodeIndex(ghost)) < distance) {
+                        int d = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+                                game.getGhostCurrentNodeIndex(ghost));
+                        if (d != -1 && d < distance) {
                             result = true;
                         }
                     }
@@ -120,6 +122,8 @@ public class TaskNet implements RAPInstance {
                 } else {
                     return result;
                 }
+            case "true":
+                return true;
             default:
                 return false;
         }
