@@ -21,7 +21,7 @@ public class RAPPacMan extends Controller<MOVE>
 	RAP rap;
 
 	public RAPPacMan() {
-		this.rap = new RAP("data/rap/rap1");
+		this.rap = new RAP("data/rap/rap2");
 	}
 	
 	public MOVE getMove(Game game,long timeDue)

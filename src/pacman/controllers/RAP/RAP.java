@@ -122,7 +122,7 @@ public class RAP {
             }
         }
 
-        // TODO simplify this with next loop, precompute these for each goal
+        // TODO simplify this with next loop, precompute these for each goal, bug near ghost spawn
         ArrayList<RAPInstance> possibleRaps = new ArrayList<>();
         for(String r : nonPrimitives) {
             RAPInstance rap = raps.get(r);
