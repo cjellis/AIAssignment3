@@ -2,14 +2,17 @@
 	"1": {
 		"type": PRIMITIVE (0),
 		"action": ACTION,
-		"target": TARGET
+		"target": TARGET,
+		"pre": [TEST],
+		"post": POST
 	},
 	"2": {
 		"type": RAP (1),
 		"action": [id],
-		"success": [SUCCESS],
-		"validity": [TEST],
-		"goal": GOALS
+		"post": POST,
+		"pre": [TEST],
+		"goal": GOALS,
+		"priority": 0 < i <= 1
 	}
 }
 
@@ -23,22 +26,21 @@ ClosestAnyPill
 ClosestPowerPill
 
 TEST
-PillsAvailable
+*pillsAvailable
 edibleGhostsWithinDistance
 edibleGhostsAlive
 nonEdibleGhostWithinDistance
 
-SUCCESS
-GetAllPills
-StayAlive
-EatGhosts
+POST - sets goal for next iteration, can be "" or ONEOF GOALS
 
 GOALS
-Stay alive
-Get pills
-Eat ghosts
+StayAlive
+GetPills
+EatGhosts
 
 HEURISTIC
 PATH
 EUCLID
 MANHATTAN
+
+* means not implemented but could be

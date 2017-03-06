@@ -30,11 +30,11 @@ d.	Go towards power pills
 e.	Go towards pills
 
 Text  file for decision tree:
-DecisionType values success failure- 1
-DecisionType values - 2 – success of 1
-Action – success of 2
+DecisionType values postconditions failure- 1
+DecisionType values - 2 – postconditions of 1
+Action – postconditions of 2
 Action – failure of 2
 DecisionType values - 3 – failure of 1
-Action – success of 3
+Action – postconditions of 3
 Action – failure of 3
 

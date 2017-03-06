@@ -2,46 +2,68 @@
 	{
 		"id": "5",
 		"type": 1,
-		"goal": "Eat Ghosts",
-		"success": ["false"],
-		"validity": ["edibleGhostWithinDistance,20"],
-		"action": ["6"]
+		"goal": "EatGhosts",
+		"post": "",
+		"pre": ["edibleGhostWithinDistance,10"],
+		"action": ["6"],
+		"priority": 0
 	},
 	{
 		"id": "3",
 		"type": 1,
-		"goal": "Stay Alive",
-		"success": ["false"],
-		"validity": ["nonEdibleGhostWithinDistance,10"],
-		"action": ["4"]
+		"goal": "StayAlive",
+		"post": "",
+		"pre": ["nonEdibleGhostWithinDistance,30"],
+		"action": ["4"],
+		"priority": 0
 	},
 	{
 		"id": "1",
 		"type": 1,
-		"goal": "Eat pills",
-		"success": ["false"],
-		"validity": ["true"],
-		"action": ["2"]
+		"goal": "EatPills",
+		"post": "",
+		"pre": [],
+		"action": ["7","2"],
+		"priority": 0
 	},
 	{
 		"id": "2",
 		"type": 0,
 		"action": "MOVETOWARD",
 		"target": "ClosestAnyPill",
-		"heuristic": "PATH"
+		"heuristic": "PATH",
+		"pre": [],
+		"post": ""
 	},
+	{
+        "id": "7",
+        "type": 0,
+        "action": "MOVETOWARD",
+        "target": "ClosestPowerPill",
+        "heuristic": "PATH",
+        "pre": ["powerPillWithinDistance,30"],
+        "post": ""
+    },
 	{
 		"id": "4",
 		"type": 0,
 		"action": "MOVEAWAY",
 		"target": "ClosestNonEdibleGhost",
-		"heuristic": "PATH"
+		"heuristic": "PATH",
+		"pre": [],
+        "post": ""
 	},
 	{
 		"id": "6",
 		"type": 0,
 		"action": "MOVETOWARD",
 		"target": "ClosestEdibleGhost",
-		"heuristic": "PATH"
+		"heuristic": "PATH",
+		"pre": [],
+        "post": ""
+	},
+	{
+	    "type": 2,
+	    "goals": ["nonEdibleGhostWithinDistance,30,StayAlive","edibleGhostWithinDistance,10,EatGhosts","EatPills"]
 	}
 ]

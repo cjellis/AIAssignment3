@@ -89,4 +89,77 @@ public class Util {
         }
         return local_target;
     }
+
+    public static boolean checkValidityOfTest(String test, Game game) {
+        boolean isNot = test.startsWith("!");
+        if(isNot) {
+            test = test.substring(1);
+        }
+        boolean result;
+
+        String values = "";
+
+        if(test.contains(",")) {
+            values = test.substring(test.indexOf(",")+1);
+            test = test.substring(0,test.indexOf(","));
+        }
+        switch(test){
+            case "nonEdibleGhostWithinDistance":
+                result = false;
+                int distance = Integer.valueOf(values);
+                for(Constants.GHOST ghost : Constants.GHOST.values()) {
+                    if (game.getGhostEdibleTime(ghost) == 0) {
+                        int d = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+                                game.getGhostCurrentNodeIndex(ghost));
+                        if (d != -1 && d < distance) {
+                            result = true;
+                        }
+                    }
+                }
+                if(isNot) {
+                    return !result;
+                } else {
+                    return result;
+                }
+            case "edibleGhostWithinDistance":
+                result = false;
+                distance = Integer.valueOf(values);
+                for(Constants.GHOST ghost : Constants.GHOST.values()) {
+                    if (game.getGhostEdibleTime(ghost) > 0) {
+                        int d = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+                                game.getGhostCurrentNodeIndex(ghost));
+                        if (d != -1 && d < distance) {
+                            result = true;
+                        }
+                    }
+                }
+                if(isNot) {
+                    return !result;
+                } else {
+                    return result;
+                }
+            case "powerPillWithinDistance":
+                result = false;
+                distance = Integer.valueOf(values);
+                int[] powerPills=game.getPowerPillIndices();
+
+                for(int i=0;i<powerPills.length;i++) {
+                    if (game.isPowerPillStillAvailable(i)) {
+                        if (game.getDistance(game.getPacmanCurrentNodeIndex(),
+                                powerPills[i], Constants.DM.PATH) < distance) {
+                            result = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(isNot) {
+                    return !result;
+                } else {
+                    return result;
+                }
+            default:
+                return false;
+        }
+    }
 }

@@ -7,8 +7,13 @@ import java.util.ArrayList;
 
 public interface RAPInstance {
     public boolean isPrimitive();
-    public boolean isSuccessful(Game game);
+    public String getPostCondition();
     public boolean isValid(Game game);
+    public String getId();
+    public int getPriority();
+    public String getGoal();
+    public void setParent(String id);
+    public String getParent();
     public ArrayList<String> getActions();
     public Constants.MOVE execute(Game game);
 }

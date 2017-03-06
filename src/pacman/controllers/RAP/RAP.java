@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import pacman.controllers.Util;
 import pacman.game.Constants;
 import pacman.game.Game;
 
@@ -13,22 +14,26 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class RAP {
     String file;
     JsonArray json;
 
     HashMap<String, RAPInstance> raps;
+    ArrayList<String> nonPrimitives;
 
-    ArrayList<RAPInstance> queue;
-    ArrayList<RAPInstance> orig_queue;
+    String goal;
+    ArrayList<String> goals;
+
 
     public RAP(String file) {
         this.file = file;
         this.raps = new HashMap<>();
-        this.queue = new ArrayList<>();
-        this.orig_queue = new ArrayList<>();
+        this.nonPrimitives = new ArrayList<>();
         parseFile();
+        this.goal = "";
     }
 
     protected void parseFile() {
@@ -44,7 +49,6 @@ public class RAP {
     }
 
     protected void buildRaps(){
-        int index = 0;
         for(JsonElement j : this.json) {
             JsonObject rap = j.getAsJsonObject();
             int type = rap.get("type").getAsInt();
@@ -53,68 +57,127 @@ public class RAP {
                 String action = rap.get("action").getAsString();
                 String target = rap.get("target").getAsString();
                 String heuristic = rap.get("heuristic").getAsString();
+                String post = rap.get("post").getAsString();
+                JsonArray pre = rap.get("pre").getAsJsonArray();
+                ArrayList<String> preArray = new ArrayList<String>();
+                for(JsonElement e : pre) {
+                    preArray.add(e.getAsString());
+                }
                 RAPInstance r;
                 switch(action){
                     case "MOVEAWAY":
-                        r = new MoveAway(target, heuristic);
+                        r = new MoveAway(target, heuristic, post, preArray);
                         break;
                     case "MOVETOWARD":
-                        r = new MoveToward(target, heuristic);
+                        r = new MoveToward(target, heuristic, post, preArray);
                         break;
                     default:
                         throw new RuntimeException("Invalid action");
                 }
                 raps.put(id, r);
+            } else if(type == 2){
+                JsonArray goals = rap.get("goals").getAsJsonArray();
+                ArrayList<String> goalArray = new ArrayList<String>();
+                for(JsonElement e : goals) {
+                    goalArray.add(e.getAsString());
+                }
+                this.goals = goalArray;
             } else {
                 String id = rap.get("id").getAsString();
-                JsonArray success = rap.get("success").getAsJsonArray();
-                JsonArray validity = rap.get("validity").getAsJsonArray();
+                String post = rap.get("post").getAsString();
+                String goal = rap.get("goal").getAsString();
+                JsonArray pre = rap.get("pre").getAsJsonArray();
                 JsonArray actions = rap.get("action").getAsJsonArray();
-                ArrayList<String> successArray = new ArrayList<String>();
-                ArrayList<String> validityArray = new ArrayList<String>();
+                ArrayList<String> preArray = new ArrayList<String>();
                 ArrayList<String> actionsArray = new ArrayList<String>();
-                for(JsonElement e : success) {
-                    successArray.add(e.getAsString());
-                }
-                for(JsonElement e : validity) {
-                    validityArray.add(e.getAsString());
+                int priority = rap.get("priority").getAsInt();
+                for(JsonElement e : pre) {
+                    preArray.add(e.getAsString());
                 }
                 for(JsonElement e : actions) {
                     actionsArray.add(e.getAsString());
                 }
 
-                RAPInstance r = new TaskNet(actionsArray, successArray, validityArray);
+                RAPInstance r = new TaskNet(id, priority, goal, actionsArray, post, preArray);
                 raps.put(id, r);
-                queue.add(index, r);
-                orig_queue.add(index, r);
-                index++;
+                nonPrimitives.add(id);
             }
         }
     }
 
     public Constants.MOVE execute(Game game) {
-        Constants.MOVE move;
+        if(this.goal.equals("")) {
+            for(String goal : goals) {
+                if(goal.contains(",")) {
+                    if (Util.checkValidityOfTest(goal.substring(0, goal.lastIndexOf(",")), game)) {
+                        this.goal = goal.substring(goal.lastIndexOf(",") + 1);
+                        break;
+                    }
+                } else {
+                    this.goal = goal;
+                }
+            }
+            if(this.goal.equals("")) {
+                this.goal = "StayAlive";
+            }
+        }
+
+        // TODO simplify this with next loop, precompute these for each goal
+        ArrayList<RAPInstance> possibleRaps = new ArrayList<>();
+        for(String r : nonPrimitives) {
+            RAPInstance rap = raps.get(r);
+            if(rap.getGoal().equals(this.goal)) {
+                possibleRaps.add(rap);
+            }
+        }
+
+        Map<Integer,ArrayList<RAPInstance>> priorityMap = new TreeMap<Integer, ArrayList<RAPInstance>>(new PriorityComparator());
+        for(RAPInstance r : possibleRaps) {
+            int priority = r.getPriority();
+            if(priorityMap.containsKey(priority)) {
+                ArrayList<RAPInstance> rapsForPriority = priorityMap.get(priority);
+                rapsForPriority.add(r);
+                priorityMap.put(priority, rapsForPriority);
+            } else {
+                ArrayList<RAPInstance> rapsForPriority = new ArrayList<>();
+                rapsForPriority.add(r);
+                priorityMap.put(priority, rapsForPriority);
+            }
+        }
+
+        ArrayList<RAPInstance> queue = new ArrayList<>();
+        for(Map.Entry<Integer, ArrayList<RAPInstance>> e : priorityMap.entrySet()) {
+            queue.addAll(e.getValue());
+        }
+
         while(true) {
             RAPInstance rap = queue.get(0);
             if(rap.isPrimitive()) {
-                queue = new ArrayList<>(orig_queue);
-                move = rap.execute(game);
-                break;
-            } else {
-                queue.remove(0);
-                if(!rap.isSuccessful(game)){
-                    if(rap.isValid(game)) {
-                        ArrayList<String> actions = rap.getActions();
-                        int index = 0;
-                        for (String s : actions) {
-                            queue.add(index, raps.get(s));
-                            index++;
-                        }
+                queue.remove(rap);
+                if(rap.isValid(game)) {
+                    RAPInstance parentRap = null;
+                    String parent = rap.getParent();
+                    while(!parent.equals("")) {
+                        parentRap = raps.get(parent);
+                        parent = parentRap.getParent();
                     }
-                    queue.add(rap);
+                    goal = parentRap.getPostCondition();
+                    return rap.execute(game);
                 }
+            } else {
+                queue.remove(rap);
+                if(rap.isValid(game)) {
+                    ArrayList<String> actions = rap.getActions();
+                    int index = 0;
+                    for(String s : actions) {
+                        RAPInstance local = raps.get(s);
+                        local.setParent(rap.getId());
+                        queue.add(index, local);
+                        index++;
+                    }
+                }
+                queue.add(rap);
             }
         }
-        return move;
     }
 }

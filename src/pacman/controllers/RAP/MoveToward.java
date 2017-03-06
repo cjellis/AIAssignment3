@@ -10,10 +10,15 @@ import java.util.ArrayList;
 public class MoveToward implements Primitive {
     String target;
     Constants.DM heuristic;
+    String post;
+    ArrayList<String> preconditions;
+    String parent;
 
-    MoveToward(String target, String heuristic) {
+    MoveToward(String target, String heuristic, String post, ArrayList<String> preconditions) {
         this.target = target;
         this.heuristic = Constants.DM.valueOf(heuristic);
+        this.post = post;
+        this.preconditions = preconditions;
     }
 
     public boolean isPrimitive(){
@@ -21,13 +26,42 @@ public class MoveToward implements Primitive {
     }
 
     @Override
-    public boolean isSuccessful(Game game) {
-        return false;
+    public String getPostCondition() {
+        return this.post;
+    }
+
+    public String getId() {
+        return "";
     }
 
     @Override
+    public int getPriority() {
+        return 0;
+    }
+
+    @Override
+    public String getGoal() {
+        return "";
+    }
+
+    @Override
+    public void setParent(String id) {
+        this.parent = id;
+    }
+
+    @Override
+    public String getParent() {
+        return this.parent;
+    }
+
+
     public boolean isValid(Game game) {
-        return false;
+        for(String test : preconditions) {
+            if(!Util.checkValidityOfTest(test, game)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
