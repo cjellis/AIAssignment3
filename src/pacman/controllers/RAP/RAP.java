@@ -17,25 +17,43 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * RAP execution
+ */
 public class RAP {
-    String file;
-    JsonArray json;
+    // file to read in
+    private String file;
+    // json of file
+    private JsonArray json;
 
-    HashMap<String, RAPInstance> raps;
-    ArrayList<String> nonPrimitives;
+    // all raps from id to rap
+    private HashMap<String, RAPInstance> raps;
+    // all non primitive raps
+    private ArrayList<String> nonPrimitives;
 
-    String goal;
-    ArrayList<String> goals;
+    // current goal
+    private String goal;
+    // all possible goals
+    private ArrayList<String> goals;
+    // priority queue for each goal
+    private Map<String, ArrayList<RAPInstance>> queuePerGoal;
 
-
+    /**
+     * Constructor
+     * @param file file to parse
+     */
     public RAP(String file) {
         this.file = file;
         this.raps = new HashMap<>();
         this.nonPrimitives = new ArrayList<>();
+        this.queuePerGoal = new HashMap<>();
         parseFile();
         this.goal = "";
     }
 
+    /**
+     * Parse the file to create all of the possible raps
+     */
     protected void parseFile() {
         JsonReader reader;
         try {
@@ -48,10 +66,15 @@ public class RAP {
         buildRaps();
     }
 
+    /**
+     * Build each RAP and save it
+     */
     protected void buildRaps(){
+        // for each json
         for(JsonElement j : this.json) {
             JsonObject rap = j.getAsJsonObject();
             int type = rap.get("type").getAsInt();
+            // if type == 0 then primitive
             if (type == 0) {
                 String id = rap.get("id").getAsString();
                 String action = rap.get("action").getAsString();
@@ -64,6 +87,7 @@ public class RAP {
                     preArray.add(e.getAsString());
                 }
                 RAPInstance r;
+                // create the correct primitive
                 switch(action){
                     case "MOVEAWAY":
                         r = new MoveAway(target, heuristic, post, preArray);
@@ -76,6 +100,7 @@ public class RAP {
                 }
                 raps.put(id, r);
             } else if(type == 2){
+                // if type == 2 then list of goals
                 JsonArray goals = rap.get("goals").getAsJsonArray();
                 ArrayList<String> goalArray = new ArrayList<String>();
                 for(JsonElement e : goals) {
@@ -83,6 +108,7 @@ public class RAP {
                 }
                 this.goals = goalArray;
             } else {
+                // else a non primitive rap
                 String id = rap.get("id").getAsString();
                 String post = rap.get("post").getAsString();
                 String goal = rap.get("goal").getAsString();
@@ -103,9 +129,41 @@ public class RAP {
                 nonPrimitives.add(id);
             }
         }
+        // for each goal make a priority queue of the RAPs for it
+        for(String goal : this.goals) {
+            goal = goal.substring(goal.lastIndexOf(",") + 1);
+            Map<Integer, ArrayList<RAPInstance>> priorityMap = new TreeMap<Integer, ArrayList<RAPInstance>>(new PriorityComparator());
+            for(String rid : this.nonPrimitives) {
+                RAPInstance rap = raps.get(rid);
+                if(rap.getGoal().equals(goal)) {
+                    int priority = rap.getPriority();
+                    if(priorityMap.containsKey(priority)) {
+                        ArrayList<RAPInstance> rapsForPriority = priorityMap.get(priority);
+                        rapsForPriority.add(rap);
+                        priorityMap.put(priority, rapsForPriority);
+                    } else {
+                        ArrayList<RAPInstance> rapsForPriority = new ArrayList<>();
+                        rapsForPriority.add(rap);
+                        priorityMap.put(priority, rapsForPriority);
+                    }
+                }
+            }
+
+            ArrayList<RAPInstance> queue = new ArrayList<>();
+            for(Map.Entry<Integer, ArrayList<RAPInstance>> e : priorityMap.entrySet()) {
+                queue.addAll(e.getValue());
+            }
+            this.queuePerGoal.put(goal, queue);
+        }
     }
 
+    /**
+     * Get the next move
+     * @param game current game state
+     * @return a move of either up, down, left, right, or neutral
+     */
     public Constants.MOVE execute(Game game) {
+        // if goal is not set, determine goal by going through the list
         if(this.goal.equals("")) {
             for(String goal : goals) {
                 if(goal.contains(",")) {
@@ -117,54 +175,35 @@ public class RAP {
                     this.goal = goal;
                 }
             }
+            // default to StayAlive
             if(this.goal.equals("")) {
                 this.goal = "StayAlive";
             }
         }
 
-        // TODO simplify this with next loop, precompute these for each goal, bug near ghost spawn
-        ArrayList<RAPInstance> possibleRaps = new ArrayList<>();
-        for(String r : nonPrimitives) {
-            RAPInstance rap = raps.get(r);
-            if(rap.getGoal().equals(this.goal)) {
-                possibleRaps.add(rap);
-            }
-        }
-
-        Map<Integer,ArrayList<RAPInstance>> priorityMap = new TreeMap<Integer, ArrayList<RAPInstance>>(new PriorityComparator());
-        for(RAPInstance r : possibleRaps) {
-            int priority = r.getPriority();
-            if(priorityMap.containsKey(priority)) {
-                ArrayList<RAPInstance> rapsForPriority = priorityMap.get(priority);
-                rapsForPriority.add(r);
-                priorityMap.put(priority, rapsForPriority);
-            } else {
-                ArrayList<RAPInstance> rapsForPriority = new ArrayList<>();
-                rapsForPriority.add(r);
-                priorityMap.put(priority, rapsForPriority);
-            }
-        }
-
-        ArrayList<RAPInstance> queue = new ArrayList<>();
-        for(Map.Entry<Integer, ArrayList<RAPInstance>> e : priorityMap.entrySet()) {
-            queue.addAll(e.getValue());
-        }
-
+        // TODO bug near ghost spawn, bug on right side
+        // get the queue for the current goal
+        ArrayList<RAPInstance> queue = (ArrayList<RAPInstance>) this.queuePerGoal.get(this.goal).clone();
         while(true) {
             RAPInstance rap = queue.get(0);
+            // get first rap, if primitive try to run it, if not add actions to the queue
             if(rap.isPrimitive()) {
                 queue.remove(rap);
                 if(rap.isValid(game)) {
                     RAPInstance parentRap = null;
+                    // alert up to the parent rap
                     String parent = rap.getParent();
                     while(!parent.equals("")) {
                         parentRap = raps.get(parent);
                         parent = parentRap.getParent();
                     }
-                    goal = parentRap.getPostCondition();
+                    // set the goal to be the top parent's post condition
+                    this.goal = parentRap.getPostCondition();
                     return rap.execute(game);
                 }
             } else {
+                // if not primitive, remove it, add all of its actions, and set the parent of the children
+                // to the current rap
                 queue.remove(rap);
                 if(rap.isValid(game)) {
                     ArrayList<String> actions = rap.getActions();

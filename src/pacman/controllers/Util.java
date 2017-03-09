@@ -5,15 +5,26 @@ import pacman.game.Game;
 
 import java.util.ArrayList;
 
+/**
+ * Util class for the DT and RAP implementations
+ */
 public class Util {
-
+    /**
+     * Get the local target
+     * @param game current game state
+     * @param target target to find
+     * @param heuristic heuristic to use for finding path distance
+     * @return node index for the target
+     */
     public static int getLocalTarget(Game game, String target, Constants.DM heuristic) {
         int local_target = -1;
+        // figure out the target
         switch(target){
             case "ClosestNonEdibleGhost":
                 int d = Integer.MAX_VALUE;
+                // for each ghost that is not edible, find the closest one
                 for(Constants.GHOST ghost : Constants.GHOST.values()) {
-                    if (game.getGhostEdibleTime(ghost) == 0) {
+                    if (game.getGhostEdibleTime(ghost) == 0 && game.getGhostLairTime(ghost)==0) {
                         int distance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
                                 game.getGhostCurrentNodeIndex(ghost));
                         if (distance < d) {
@@ -25,6 +36,7 @@ public class Util {
                 break;
             case "ClosestEdibleGhost":
                 d = Integer.MAX_VALUE;
+                // for each edible ghost, find the closest one
                 for(Constants.GHOST ghost : Constants.GHOST.values()) {
                     if (game.getGhostEdibleTime(ghost) > 0) {
                         int distance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
@@ -85,12 +97,19 @@ public class Util {
                 break;
 
             default:
-                local_target = game.getPacmanCurrentNodeIndex(); //TODO change this
+                throw new RuntimeException("not valid target");
         }
         return local_target;
     }
 
+    /**
+     * Check if test is valid
+     * @param test test to check
+     * @param game current game state
+     * @return boolean if test is valid
+     */
     public static boolean checkValidityOfTest(String test, Game game) {
+        // check if the test is a not
         boolean isNot = test.startsWith("!");
         if(isNot) {
             test = test.substring(1);
@@ -99,23 +118,27 @@ public class Util {
 
         String values = "";
 
+        // get the values for the test
         if(test.contains(",")) {
             values = test.substring(test.indexOf(",")+1);
             test = test.substring(0,test.indexOf(","));
         }
+        // figure out the test
         switch(test){
             case "nonEdibleGhostWithinDistance":
                 result = false;
                 int distance = Integer.valueOf(values);
+                // for each ghost, if not edible, check if less than the value
                 for(Constants.GHOST ghost : Constants.GHOST.values()) {
-                    if (game.getGhostEdibleTime(ghost) == 0) {
+                    if (game.getGhostEdibleTime(ghost) == 0 && game.getGhostLairTime(ghost)==0) {
                         int d = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
                                 game.getGhostCurrentNodeIndex(ghost));
-                        if (d != -1 && d < distance) {
+                        if (d < distance) {
                             result = true;
                         }
                     }
                 }
+                // flip result if needed
                 if(isNot) {
                     return !result;
                 } else {
@@ -124,15 +147,17 @@ public class Util {
             case "edibleGhostWithinDistance":
                 result = false;
                 distance = Integer.valueOf(values);
+                // for each ghost, if edible, and less than the value
                 for(Constants.GHOST ghost : Constants.GHOST.values()) {
                     if (game.getGhostEdibleTime(ghost) > 0) {
                         int d = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
                                 game.getGhostCurrentNodeIndex(ghost));
-                        if (d != -1 && d < distance) {
+                        if (d < distance) {
                             result = true;
                         }
                     }
                 }
+                // flip result if needed
                 if(isNot) {
                     return !result;
                 } else {
@@ -153,6 +178,7 @@ public class Util {
                     }
                 }
 
+                // flip result if needed
                 if(isNot) {
                     return !result;
                 } else {

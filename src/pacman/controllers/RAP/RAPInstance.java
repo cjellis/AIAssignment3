@@ -5,15 +5,18 @@ import pacman.game.Game;
 
 import java.util.ArrayList;
 
+/**
+ * Interface for RAP instances
+ */
 public interface RAPInstance {
-    public boolean isPrimitive();
-    public String getPostCondition();
-    public boolean isValid(Game game);
-    public String getId();
-    public int getPriority();
-    public String getGoal();
-    public void setParent(String id);
-    public String getParent();
-    public ArrayList<String> getActions();
-    public Constants.MOVE execute(Game game);
+    boolean isPrimitive();
+    String getPostCondition();
+    boolean isValid(Game game);
+    String getId();
+    int getPriority();
+    String getGoal();
+    void setParent(String id);
+    String getParent();
+    ArrayList<String> getActions();
+    Constants.MOVE execute(Game game);
 }

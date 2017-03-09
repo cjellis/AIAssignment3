@@ -16,7 +16,7 @@
 		"type": 1,
 		"name": "NonEdibleGhostWithinDistance",
 		"values": [20],
-		"success": "4",
+		"successprob n": "4",
 		"failure": "3"
 	},
 	"4": {
