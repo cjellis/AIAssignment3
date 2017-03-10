@@ -1,0 +1,47 @@
+{
+	"3": {
+		"type": 1,
+		"name": "EdibleGhostWithinDistance",
+		"values": [7],
+		"success": "2",
+		"failure": "5"
+	},
+	"2": {
+		"type": 0,
+		"direction": TOWARDS,
+		"heuristic": "PATH",
+		"target": "ClosestEdibleGhost"
+	},
+	"1": {
+		"type": 1,
+		"name": "NonEdibleGhostWithinDistance",
+		"values": [15],
+		"success": "6",
+		"failure": "3"
+	},
+	"6": {
+        "type": 1,
+        "name": "ClosestPowerPill",
+        "values": [7],
+        "success": "7",
+        "failure": "4"
+    },
+	"4": {
+		"type": 0,
+		"direction": "AWAY",
+		"heuristic": "PATH",
+		"target": "ClosestNonEdibleGhost"
+	},
+	"5": {
+		"type": 0,
+		"direction": TOWARDS,
+		"heuristic": "PATH",
+		"target": "ClosestAnyPill"
+	},
+	"7": {
+        "type": 0,
+        "direction": TOWARDS,
+        "heuristic": "PATH",
+        "target": "ClosestPowerPill"
+    }
+}

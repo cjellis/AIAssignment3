@@ -97,6 +97,14 @@ public class DecisionTree {
                         values.get(0).getAsInt()
                 );
                 break;
+            case "ClosestPowerPill":
+                values = currentNode.get("values").getAsJsonArray();
+                n = new ClosestPowerPill(
+                        buildTree(this.json.get(currentNode.get(SUCCESS).getAsString()).getAsJsonObject()),
+                        buildTree(this.json.get(currentNode.get(FAILURE).getAsString()).getAsJsonObject()),
+                        values.get(0).getAsInt()
+                );
+                break;
             default:
                 throw new RuntimeException("invalid decision type found in file");
         }
