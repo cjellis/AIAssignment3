@@ -22,21 +22,21 @@ import java.util.TreeMap;
  */
 public class RAP {
     // file to read in
-    private String file;
+    protected String file;
     // json of file
     private JsonArray json;
 
     // all raps from id to rap
-    private HashMap<String, RAPInstance> raps;
+    protected HashMap<String, RAPInstance> raps;
     // all non primitive raps
-    private ArrayList<String> nonPrimitives;
+    protected ArrayList<String> nonPrimitives;
 
     // current goal
-    private String goal;
+    protected String goal;
     // all possible goals
-    private ArrayList<String> goals;
+    protected ArrayList<String> goals;
     // priority queue for each goal
-    private Map<String, ArrayList<RAPInstance>> queuePerGoal;
+    protected Map<String, ArrayList<RAPInstance>> queuePerGoal;
 
     /**
      * Constructor
@@ -181,7 +181,7 @@ public class RAP {
             }
         }
 
-        // TODO bug near ghost spawn, bug on right side
+        // TODO bug near ghost spawn, bug on right side - think its fixed
         // get the queue for the current goal
         ArrayList<RAPInstance> queue = (ArrayList<RAPInstance>) this.queuePerGoal.get(this.goal).clone();
         while(true) {

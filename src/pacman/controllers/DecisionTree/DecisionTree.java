@@ -22,11 +22,11 @@ public class DecisionTree {
     private static final String TOWARDS = "TOWARDS";
 
     // file to read
-    private String file;
+    protected String file;
     // json object read from file
-    private JsonObject json;
+    protected JsonObject json;
     // root node of the tree
-    private Node root;
+    protected Node root;
 
     /**
      * Creates a decision tree by parsing the file
@@ -62,7 +62,7 @@ public class DecisionTree {
      * @param currentNode the root node of the tree
      * @return the root node populated with its children
      */
-    protected Node buildTree(JsonObject currentNode) {
+    private Node buildTree(JsonObject currentNode) {
         // if type is 0 then primitive
         if (currentNode.get("type").getAsInt() == 0) {
             String heuristic = currentNode.get("heuristic").getAsString();

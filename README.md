@@ -1,1 +1,2 @@
-more info:  http://joseatovar.github.io/Ms-Pacman-vs-Ghost/
+check for more values under rap test
+fix bugs

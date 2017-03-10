@@ -1,0 +1,78 @@
+[
+	{
+		"id": "5",
+		"type": 1,
+		"goal": "EatGhosts",
+		"post": "",
+		"pre": ["edibleGhostWithinDistance,10"],
+		"action": ["6"],
+		"priority": 0
+	},
+	{
+		"id": "3",
+		"type": 1,
+		"goal": "StayAlive",
+		"post": "",
+		"pre": ["nonEdibleGhostWithinDistance,30"],
+		"action": ["4"],
+		"priority": 0
+	},
+	{
+		"id": "1",
+		"type": 1,
+		"goal": "EatPills",
+		"post": "",
+		"pre": [],
+		"action": ["7"],
+		"priority": 1
+	},
+	{
+        "id": "8",
+        "type": 1,
+        "goal": "EatPills",
+        "post": "",
+        "pre": [],
+        "action": ["2"],
+        "priority": 1
+    },
+	{
+		"id": "2",
+		"type": 0,
+		"action": "MOVETOWARD",
+		"target": "ClosestAnyPill",
+		"heuristic": "PATH",
+		"pre": [],
+		"post": ""
+	},
+	{
+        "id": "7",
+        "type": 0,
+        "action": "MOVETOWARD",
+        "target": "ClosestPowerPill",
+        "heuristic": "PATH",
+        "pre": ["powerPillWithinDistance,30"],
+        "post": ""
+    },
+	{
+		"id": "4",
+		"type": 0,
+		"action": "MOVEAWAY",
+		"target": "ClosestNonEdibleGhost",
+		"heuristic": "PATH",
+		"pre": [],
+        "post": ""
+	},
+	{
+		"id": "6",
+		"type": 0,
+		"action": "MOVETOWARD",
+		"target": "ClosestEdibleGhost",
+		"heuristic": "PATH",
+		"pre": [],
+        "post": ""
+	},
+	{
+	    "type": 2,
+	    "goals": ["powerPillWithinDistance,100,EatPills","edibleGhostWithinDistance,10,EatGhosts","EatPills"]
+	}
+]
