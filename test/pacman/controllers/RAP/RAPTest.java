@@ -20,7 +20,6 @@ public class RAPTest {
 
     @Test
     public void parseFileAndBuildRapsTest(){
-        // TODO check more values
         assertEquals(file, rap.file);
         assertEquals(8, rap.raps.size());
         assertEquals(4, rap.nonPrimitives.size());
