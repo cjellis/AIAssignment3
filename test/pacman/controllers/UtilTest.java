@@ -27,7 +27,6 @@ public class UtilTest {
         assertEquals(963, target);
         target = Util.getLocalTarget(game, "ClosestPowerPill", Constants.DM.PATH);
         assertEquals(1083, target);
-
     }
 
     @Test
