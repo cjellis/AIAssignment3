@@ -1,19 +1,26 @@
 {
-	"1": {
-		"type": PRIMITIVE (0),
-		"action": ACTION,
-		"target": TARGET,
-		"pre": [TEST],
-		"post": POST
-	},
-	"2": {
-		"type": RAP (1),
-		"action": [id],
-		"post": POST,
-		"pre": [TEST],
-		"goal": GOALS,
-		"priority": 0 < i <= 1
-	}
+	{
+        "id": "id",
+        "type": 1 - TaskNet,
+        "goal": ONEOF GOALS,
+        "post": ONEOF GOALS,
+        "pre": [TEST],
+        "action": [id],
+        "priority": 0 <= p <= 1
+    },
+    {
+        "id": "id",
+        "type": 0 - Primitive,
+        "action": ONEOF ACTION,
+        "target": ONEOF TARGET,
+        "heuristic": ONEOF HEURISTIC,
+        "pre": [TEST],
+        "post": ONEOF GOALS
+    },
+    {
+        "type": 2 - List of goals in order of priority,
+        "goals": [GOALS]
+    }
 }
 
 ACTION
@@ -21,17 +28,16 @@ MOVETOWARD
 MOVEAWAY
 
 TARGET
-ClosestGhost
+ClosestEdibleGhost
+ClosestNonEdibleGhost
 ClosestAnyPill
 ClosestPowerPill
 
 TEST
-*pillsAvailable
+powerPillWithinDistance
 edibleGhostsWithinDistance
-edibleGhostsAlive
-nonEdibleGhostWithinDistance
+nonEdibleGhostsWithinDistance
 
-POST - sets goal for next iteration, can be "" or ONEOF GOALS
 
 GOALS
 StayAlive
@@ -42,5 +48,3 @@ HEURISTIC
 PATH
 EUCLID
 MANHATTAN
-
-* means not implemented but could be
