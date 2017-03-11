@@ -13,7 +13,7 @@ public class RAPPacMan extends Controller<MOVE>
 	private RAP rap;
 
 	public RAPPacMan() {
-		this.rap = new RAP("data/rap/rap2");
+		this.rap = new RAP("data/rap/rap6");
 	}
 	
 	public MOVE getMove(Game game,long timeDue)

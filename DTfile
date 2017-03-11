@@ -1,9 +1,10 @@
+Decision Tree File Structure:
 {
 	"{id}" : {
 		"type": 1,
 		"name": ONEOF TYPES,
 		"values": [values for that type],
-		"postconditions": "id",
+		"success": "id",
 		"failure": "id"
 	}
 	"{id}": {
@@ -14,23 +15,30 @@
 	}
 }
 
+Notes:
 id "1" is the root of the tree
 
-TYPES
+Type 0 is an action
+Type 1 is a decision
+
+
+Possible Values:
+
+TYPES -
 EdibleGhostWithinDistance
 NonEdibleGhostWithinDistance
 ClosestPowerPill
 
-PRIMITIVES
+PRIMITIVES -
 AWAY
 TOWARDS
 
-HEURISTIC
+HEURISTIC -
 PATH
 EUCLID
 MANHATTAN
 
-TARGET
+TARGET -
 ClosestEdibleGhost
 ClosestNonEdibleGhost
 ClosestAnyPill

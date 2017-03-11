@@ -1,16 +1,17 @@
+RAP File Structure:
 {
 	{
         "id": "id",
-        "type": 1 - TaskNet,
+        "type": 1,
         "goal": ONEOF GOALS,
         "post": ONEOF GOALS,
         "pre": [TEST],
         "action": [id],
-        "priority": 0 <= p <= 1
+        "priority": 0
     },
     {
         "id": "id",
-        "type": 0 - Primitive,
+        "type": 0,
         "action": ONEOF ACTION,
         "target": ONEOF TARGET,
         "heuristic": ONEOF HEURISTIC,
@@ -23,28 +24,39 @@
     }
 }
 
-ACTION
+Notes:
+Type 0 is a Primitive
+Type 1 is a TaskNet
+Type 2 is a list of goals
+
+Priority can be any values between 0 and 1
+
+
+Possible Values:
+
+ACTION -
 MOVETOWARD
 MOVEAWAY
 
-TARGET
+TARGET -
 ClosestEdibleGhost
 ClosestNonEdibleGhost
 ClosestAnyPill
 ClosestPowerPill
 
-TEST
+TEST -
 powerPillWithinDistance
 edibleGhostsWithinDistance
 nonEdibleGhostsWithinDistance
 
 
-GOALS
+GOALS -
 StayAlive
-GetPills
+EatPills
 EatGhosts
+EatPowerPill
 
-HEURISTIC
+HEURISTIC -
 PATH
 EUCLID
 MANHATTAN

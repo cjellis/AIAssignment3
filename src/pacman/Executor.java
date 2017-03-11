@@ -63,7 +63,9 @@ public class Executor
 		///*
 		//run the game in asynchronous mode.
 		boolean visual=true;
-		exec.runGameTimed(new DTPacMan(),new StarterGhosts(),visual);
+		exec.runExperiment(new RAPPacMan(),new StarterGhosts(),100);
+
+		//exec.runGameTimed(new DTPacMan(),new StarterGhosts(),visual);
 
 		//exec.runGameTimed(new RAPPacMan(),new StarterGhosts(),visual);
 //		exec.runGameTimed(new NearestPillPacMan(),new AggressiveGhosts(),visual);
@@ -114,9 +116,10 @@ public class Executor
 		        game.advanceGame(pacManController.getMove(game.copy(),System.currentTimeMillis()+DELAY),
 		        		ghostController.getMove(game.copy(),System.currentTimeMillis()+DELAY));
 			}
+			double score = game.getScore();
 			
-			avgScore+=game.getScore();
-			System.out.println(i+"\t"+game.getScore());
+			avgScore+=score;
+			System.out.println(i+"\t"+score);
 		}
 		
 		System.out.println(avgScore/trials);
