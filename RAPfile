@@ -1,5 +1,14 @@
 RAP File Structure:
-{
+[
+    {
+        "id": "id",
+        "type": 0,
+        "action": ONEOF ACTION,
+        "target": ONEOF TARGET,
+        "heuristic": ONEOF HEURISTIC,
+        "pre": [TEST],
+        "post": ONEOF GOALS
+    },
 	{
         "id": "id",
         "type": 1,
@@ -10,19 +19,10 @@ RAP File Structure:
         "priority": 0
     },
     {
-        "id": "id",
-        "type": 0,
-        "action": ONEOF ACTION,
-        "target": ONEOF TARGET,
-        "heuristic": ONEOF HEURISTIC,
-        "pre": [TEST],
-        "post": ONEOF GOALS
-    },
-    {
-        "type": 2 - List of goals in order of priority,
-        "goals": [GOALS]
+        "type": 2,
+        "goals": ["TEST,GOALS"]
     }
-}
+]
 
 Notes:
 Type 0 is a Primitive
@@ -30,6 +30,13 @@ Type 1 is a TaskNet
 Type 2 is a list of goals
 
 Priority can be any values between 0 and 1
+
+The TEST values are strings with a test name and any values.
+All of the currently implemented tests only need one value.
+
+The "TEST,GOALS" denotes a string consisting of a test with its
+values and a goal
+e.g. powerPillWithinDistance,15,EatPowerPill
 
 
 Possible Values:
@@ -45,10 +52,9 @@ ClosestAnyPill
 ClosestPowerPill
 
 TEST -
-powerPillWithinDistance
-edibleGhostsWithinDistance
-nonEdibleGhostsWithinDistance
-
+powerPillWithinDistance,x
+edibleGhostsWithinDistance,x
+nonEdibleGhostsWithinDistance,x
 
 GOALS -
 StayAlive

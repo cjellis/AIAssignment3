@@ -1,17 +1,17 @@
 Decision Tree File Structure:
 {
+	"{id}": {
+		"type": 0
+		"direction": ONEOF PRIMITIVE,
+		"heuristic": ONEOF HEURISTIC,
+		"target": ONEOF TARGET
+	},
 	"{id}" : {
 		"type": 1,
 		"name": ONEOF TYPES,
 		"values": [values for that type],
 		"success": "id",
 		"failure": "id"
-	}
-	"{id}": {
-		"type": 0
-		"direction": ONEOF PRIMITIVE,
-		"heuristic": ONEOF HEURISTIC,
-		"target": ONEOF TARGET
 	}
 }
 
