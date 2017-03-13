@@ -1,6 +1,14 @@
 /////////////////////////////////////////////////
 Assignment 3
 /////////////////////////////////////////////////
+Notes:
+The code makes use of the gson library under the libraries directory for
+parsing the input files.
+
+The test code makes use of the mockito library, which has dependencies
+on byte-buddy, byte-buddy-agent, and objenesis. All of these libraries 
+are in the libraries folder.
+/////////////////////////////////////////////////
 To run DTPacMan:
 In the executor class, instantiate DTPacMan and pass it into
 whatever function you are using. If you want to create a new 

@@ -181,7 +181,6 @@ public class RAP {
             }
         }
 
-        // TODO bug near ghost spawn, bug on right side - think its fixed
         // get the queue for the current goal
         ArrayList<RAPInstance> queue = (ArrayList<RAPInstance>) this.queuePerGoal.get(this.goal).clone();
         while(true) {

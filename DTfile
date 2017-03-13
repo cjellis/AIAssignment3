@@ -25,9 +25,9 @@ Type 1 is a decision
 Possible Values:
 
 TYPES -
-EdibleGhostWithinDistance
-NonEdibleGhostWithinDistance
-ClosestPowerPill
+EdibleGhostWithinDistance - one value which is the max distance to check
+NonEdibleGhostWithinDistance - one value which is the max distance to check
+ClosestPowerPill - one value which is the max distance to check
 
 PRIMITIVES -
 AWAY
