@@ -13,7 +13,7 @@ public class DTPacMan extends Controller<MOVE>
 	private DecisionTree dt;
 
 	public DTPacMan() {
-		this.dt = new DecisionTree("data/decision/dt4");
+		this.dt = new DecisionTree("data/decision/dt5");
 	}
 	
 	public MOVE getMove(Game game,long timeDue)
